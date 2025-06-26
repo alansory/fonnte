@@ -26,17 +26,18 @@ router.post('/send-message', async (req, res) => {
       body: JSON.stringify(bodyData),
     });
 
-    const responseText = await response.text();
+    const responseData = await response.json(); // <= gunakan .json()
+
     console.log('📩 Fonnte API response status:', response.status);
-    console.log('📩 Fonnte API response body:', responseText);
+    console.log('📩 Fonnte API response body:', responseData);
 
     if (!response.ok) {
       console.error('❌ Fonnte API responded with error status');
-      return res.status(response.status).send({ error: 'Failed to send message', detail: responseText });
+      return res.status(response.status).send({ error: 'Failed to send message', detail: responseData });
     }
 
     console.log('✅ Message sent successfully!');
-    res.send(responseText);
+    res.send(responseData); // kirim JSON response ke client
   } catch (error) {
     console.error('💥 Send message error:', error.message);
     res.status(500).send({ error: 'Internal server error while sending message' });
